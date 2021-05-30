@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <title>
+        currency
+    </title>
+    <head>
+        <script>
+            document.addEventListener("DOMContentLoaded",() =>{
+
+                document.querySelector('form').onsubmit=function(){
+
+
+                    fetch('http://api.exchangeratesapi.io/v1/latest?access_key=b5f12b0fbe57832aac3de331ce1607c2')
+                    .then(function(response) { 
+                        
+                        return response.json() ;
+                    })
+                    .then(function (data) {
+
+                        console.log(data); //to see in console API data.
+                        const currency=document.querySelector("#currency").value.toUpperCase();
+
+                        const rate=data.rates[currency];
+                        const date=data.date;
+
+                        if(rate !== undefined){
+                            document.querySelector('#result').innerHTML=`1 USD is equal to "${rate.toFixed(2)}" in ${currency}.`; //toFixed() used for fix decimals .
+                            document.querySelector('h4').innerHTML=`For date :${date}`; 
+                        }else{
+                            document.querySelector('#result').innerHTML=`${currency} is undefined.`;
+                        };
+                    }).catch(function(error){
+
+                        console.log('Error:',error);        //if API stop working .
+                        document.querySelector('h4').innerHTML=error;
+ 
+                    });
+
+                   
+                    return false;    
+
+
+                };
+               
+       
+
+            });
+
+        </script>
+    </head>
+    <body>
+        
+        <h2> </h2>
+        <form>
+            <input type="text" id="currency" placeholder="Enter Currency ex:USD,INR,EUR">
+            <input type="submit" id="submit"value="Convert">
+        </form>
+        <hr>
+        <div id='result'>
+
+        </div>
+        <h4> </h4>
+
+    </body>
+
+</html>
